@@ -28,7 +28,7 @@ namespace TimeSummary
             {
                 try
                 {
-                    lineItems.Add( TimeLineItem.Parse( timeEntry ) );
+                    if ( timeEntry != string.Empty && timeEntry != "\r" ) lineItems.Add( TimeLineItem.Parse( timeEntry ) );
                 }
                 catch
                 {
@@ -48,10 +48,11 @@ namespace TimeSummary
 
             foreach ( var li in timeGroups )
             {
-               outputString.AppendLine( string.Format( "{0} - {1} Hours", li.ProjectName, li.TotalHours ) ); 
+               outputString.AppendLine( string.Format( "{0,-5}{1:0.00} Hours", li.ProjectName, li.TotalHours ) ); 
             }
 
             txtOutput.Text = outputString.ToString();
         }
+
     }
 }

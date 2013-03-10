@@ -35,19 +35,18 @@
             // 
             // txtInput
             // 
-            this.txtInput.Location = new System.Drawing.Point(20, 20);
-            this.txtInput.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.txtInput.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtInput.Location = new System.Drawing.Point(13, 13);
             this.txtInput.Multiline = true;
             this.txtInput.Name = "txtInput";
-            this.txtInput.Size = new System.Drawing.Size(1318, 439);
+            this.txtInput.Size = new System.Drawing.Size(880, 243);
             this.txtInput.TabIndex = 0;
             // 
             // btnCompute
             // 
-            this.btnCompute.Location = new System.Drawing.Point(20, 471);
-            this.btnCompute.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.btnCompute.Location = new System.Drawing.Point(13, 262);
             this.btnCompute.Name = "btnCompute";
-            this.btnCompute.Size = new System.Drawing.Size(1320, 35);
+            this.btnCompute.Size = new System.Drawing.Size(880, 23);
             this.btnCompute.TabIndex = 1;
             this.btnCompute.Text = "Compute";
             this.btnCompute.UseVisualStyleBackColor = true;
@@ -55,23 +54,22 @@
             // 
             // txtOutput
             // 
-            this.txtOutput.Location = new System.Drawing.Point(20, 522);
-            this.txtOutput.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.txtOutput.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtOutput.Location = new System.Drawing.Point(12, 291);
             this.txtOutput.Multiline = true;
             this.txtOutput.Name = "txtOutput";
-            this.txtOutput.Size = new System.Drawing.Size(1318, 439);
+            this.txtOutput.Size = new System.Drawing.Size(880, 243);
             this.txtOutput.TabIndex = 2;
             // 
-            // Form1
+            // MainWindow
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1358, 946);
+            this.ClientSize = new System.Drawing.Size(905, 547);
             this.Controls.Add(this.txtOutput);
             this.Controls.Add(this.btnCompute);
             this.Controls.Add(this.txtInput);
-            this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.Name = "Form1";
+            this.Name = "MainWindow";
             this.Text = "Time Summarizer";
             this.ResumeLayout(false);
             this.PerformLayout();
