@@ -39,9 +39,16 @@ namespace TimeSummary
 
             StringBuilder outputString = new StringBuilder();
 
-            foreach (TimeLineItem tli in lineItems)
+            var timeGroups = from li in lineItems
+                             group li by li.ProjectName into g
+                             orderby g.Key
+                             select new { ProjectName = g.Key, TotalHours = g.Sum( li => li.TimeSpentInHours() ) }; 
+                               
+
+
+            foreach ( var li in timeGroups )
             {
-                outputString.AppendLine(tli.ToString());
+               outputString.AppendLine( string.Format( "{0} - {1} Hours", li.ProjectName, li.TotalHours ) ); 
             }
 
             txtOutput.Text = outputString.ToString();
