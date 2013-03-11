@@ -117,4 +117,19 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="lblUsage.Text" xml:space="preserve">
+    <value>Usage:   I track my time in Evernote so that I can update it anywhere. I then cut and paste the tracking details into 
+         this application for a quick summary so I don't have manually calcuate it.
+
+Format:  StartTime - EndTime Project [Comment]
+
+Example: 8:15 am - 8:45 am AT Approving Timesheets &amp; Prosessing Email
+         8:45 am - 9:00 am SU Eric's Standup
+         9:00 am - 9:15 am AT
+         9:15 am - 10:00 am SU Clerk Edition, Judge Edition, and Jail Standups
+         10:00 am - 11:00 am 7197 Design Session with Hugo, Sarah, and Andrew
+
+ 
+</value>
+  </data>
 </root>

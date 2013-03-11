@@ -58,7 +58,7 @@ namespace TimeSummary
                 // output the comments for each line item on a seperate line
                 foreach ( var comment in comments )
                 {
-                    outputString.AppendLine( string.Format( "     {0}", comment ) );
+                    outputString.AppendLine( string.Format( "          {0}", comment ) );
                 }
             }
 
