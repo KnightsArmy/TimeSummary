@@ -42,23 +42,30 @@ namespace TimeSummary
             var timeGroups = from li in lineItems
                              group li by li.ProjectName into g
                              orderby g.Key
-                             select new { ProjectName = g.Key, TotalHours = g.Sum( li => li.TimeSpentInHours() ) }; 
-                               
+                             select new { ProjectName = g.Key, TotalHours = g.Sum( li => li.TimeSpentInHours() ) };
+
 
 
             foreach ( var li in timeGroups )
             {
-               outputString.AppendLine( string.Format( "{0,-5}{1:0.00} Hours", li.ProjectName, li.TotalHours ) );
+                // output the total time spent for the day on a bucket
+                outputString.AppendLine( string.Format( "{0,-5}{1:0.00} Hours", li.ProjectName, li.TotalHours ) );
 
-               var comments = from cli in lineItems
-                              where cli.ProjectName == li.ProjectName
-                              select cli.Comment;
+                var comments = from cli in lineItems
+                               where cli.ProjectName == li.ProjectName
+                               select cli.Comment;
 
-               foreach ( var comment in comments )
-               {
-                   outputString.AppendLine( string.Format( "     {0}", comment ) );
-               }
+                // output the comments for each line item on a seperate line
+                foreach ( var comment in comments )
+                {
+                    outputString.AppendLine( string.Format( "     {0}", comment ) );
+                }
             }
+
+            // Output a summary line
+            outputString.AppendLine( "----------------------------------------------------------" );
+            outputString.AppendLine( string.Format( "Total Time Worked: {0:0.00} Hours", timeGroups.Sum( x => x.TotalHours ) ) );
+
 
             txtOutput.Text = outputString.ToString();
         }
