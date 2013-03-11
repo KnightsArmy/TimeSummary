@@ -52,7 +52,7 @@ namespace TimeSummary
                 outputString.AppendLine( string.Format( "{0,-5}{1:0.00} Hours", li.ProjectName, li.TotalHours ) );
 
                 var comments = from cli in lineItems
-                               where cli.ProjectName == li.ProjectName
+                               where cli.ProjectName == li.ProjectName && cli.Comment != string.Empty
                                select cli.Comment;
 
                 // output the comments for each line item on a seperate line
