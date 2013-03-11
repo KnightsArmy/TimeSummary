@@ -7,7 +7,7 @@ namespace TimeEntry.Models.Tests
     public class TimeLineItemTests
     {
         #region Parsing Tests
-        
+
         [TestMethod]
         public void ParseVerboseEntry()
         {
@@ -147,7 +147,7 @@ namespace TimeEntry.Models.Tests
         }
 
         [TestMethod]
-        [ExpectedException( typeof (FormatException))]
+        [ExpectedException( typeof( FormatException ) )]
         public void ParseWithoutProjectName()
         {
             // Arrange
@@ -160,7 +160,7 @@ namespace TimeEntry.Models.Tests
         }
 
         [TestMethod]
-        [ExpectedException( typeof (FormatException))]
+        [ExpectedException( typeof( FormatException ) )]
         public void ParseWithInvalidTime()
         {
             // Arrange
@@ -174,7 +174,7 @@ namespace TimeEntry.Models.Tests
         }
 
         [TestMethod]
-        [ExpectedException( typeof (FormatException))]
+        [ExpectedException( typeof( FormatException ) )]
         public void ParseWithCraziness()
         {
             // Act
@@ -182,7 +182,7 @@ namespace TimeEntry.Models.Tests
         }
 
         [TestMethod]
-        [ExpectedException( typeof (FormatException))]
+        [ExpectedException( typeof( FormatException ) )]
         public void ParseWithStringEmpty()
         {
             // Act
@@ -190,7 +190,7 @@ namespace TimeEntry.Models.Tests
         }
 
         [TestMethod]
-        [ExpectedException( typeof (FormatException))]
+        [ExpectedException( typeof( FormatException ) )]
         public void ParseWithOnlyNewLine()
         {
             // Act
@@ -234,7 +234,7 @@ namespace TimeEntry.Models.Tests
         }
 
         [TestMethod]
-        public void TimeSpentCrossOverNoonTest()
+        public void TimeSpentCrossOverNoonWithAMPMSpecifiedTest()
         {
             // Arrange
             string startTime = "11:00 am";
@@ -249,8 +249,21 @@ namespace TimeEntry.Models.Tests
             Assert.AreEqual( 1.5, timeSpent );
         }
 
-        // test going over noon
-        #endregion
+        [TestMethod]
+        public void TimeSpentCrossOverNoonWithoutAMPMSpecifiedTest()
+        {
+            // Arrange
+            string startTime = "11:00";
+            string endTime = "1:30";
+            string projectName = "AT";
+            TimeLineItem sut = TimeLineItem.Parse( string.Format( "{0} - {1} {2}", startTime, endTime, projectName ) );
 
+            // Act
+            double timeSpent = sut.TimeSpentInHours();
+
+            // Assert
+            Assert.AreEqual( 2.5, timeSpent );
+        }
+        #endregion
     }
 }
