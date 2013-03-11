@@ -19,7 +19,7 @@ namespace TimeSummary
             InitializeComponent();
         }
 
-        private void btnCompute_Click(object sender, EventArgs e)
+        private void btnCompute_Click( object sender, EventArgs e )
         {
             string total = string.Empty;
             List<TimeLineItem> lineItems = new List<TimeLineItem>();
@@ -48,7 +48,16 @@ namespace TimeSummary
 
             foreach ( var li in timeGroups )
             {
-               outputString.AppendLine( string.Format( "{0,-5}{1:0.00} Hours", li.ProjectName, li.TotalHours ) ); 
+               outputString.AppendLine( string.Format( "{0,-5}{1:0.00} Hours", li.ProjectName, li.TotalHours ) );
+
+               var comments = from cli in lineItems
+                              where cli.ProjectName == li.ProjectName
+                              select cli.Comment;
+
+               foreach ( var comment in comments )
+               {
+                   outputString.AppendLine( string.Format( "     {0}", comment ) );
+               }
             }
 
             txtOutput.Text = outputString.ToString();
