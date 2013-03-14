@@ -28,6 +28,25 @@ namespace TimeEntry.Models.Tests
         }
 
         [TestMethod]
+        public void ParseOddSpacingWithProjectEntry()
+        {
+            // Arrange
+            string startTime = "9:00 am";
+            string endTime = "9:30 am";
+            string projectName = "AT";
+            string comment = "Timesheets & Emails";
+
+            // Act
+            TimeLineItem sut = TimeLineItem.Parse( string.Format( "{0} - {1}  {2} {3}", startTime, endTime, projectName, comment ) );
+
+            // Assert
+            Assert.AreEqual( DateTime.Parse( startTime ), sut.StartTime );
+            Assert.AreEqual( DateTime.Parse( endTime ), sut.EndTime );
+            Assert.AreEqual( projectName, sut.ProjectName );
+            Assert.AreEqual( comment, sut.Comment );
+        }
+
+        [TestMethod]
         public void ParseWithMilitaryTime()
         {
             // Arrange
@@ -156,6 +175,19 @@ namespace TimeEntry.Models.Tests
 
             // Act
             TimeLineItem sut = TimeLineItem.Parse( string.Format( "{0}-{1}", userEnteredStartTime, userEnteredEndTime ) );
+
+        }
+
+        [TestMethod]
+        [ExpectedException( typeof( FormatException ) )]
+        public void ParseWithoutProjectNameAndExtraWhiteSpace()
+        {
+            // Arrange
+            string userEnteredStartTime = "9:00";
+            string userEnteredEndTime = "10:00";
+
+            // Act
+            TimeLineItem sut = TimeLineItem.Parse( string.Format( "{0}-{1} ", userEnteredStartTime, userEnteredEndTime ) );
 
         }
 

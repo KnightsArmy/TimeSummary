@@ -9,11 +9,14 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Text.RegularExpressions;
 using TimeEntry.Models;
+using log4net;
 
 namespace TimeSummary
 {
     public partial class MainWindow : Form
     {
+        private static readonly log4net.ILog logger = log4net.LogManager.GetLogger ( System.Reflection.MethodBase.GetCurrentMethod().DeclaringType );
+
         public MainWindow()
         {
             InitializeComponent();
@@ -21,6 +24,9 @@ namespace TimeSummary
 
         private void btnCompute_Click( object sender, EventArgs e )
         {
+            // Testing Logging
+            logger.Info( "Test" );
+            
             string total = string.Empty;
             List<TimeLineItem> lineItems = new List<TimeLineItem>();
 
@@ -40,7 +46,7 @@ namespace TimeSummary
             StringBuilder outputString = new StringBuilder();
 
             var timeGroups = from li in lineItems
-                             group li by li.ProjectName into g
+                             group li by li.ProjectName.ToUpper() into g
                              orderby g.Key
                              select new { ProjectName = g.Key, TotalHours = g.Sum( li => li.TimeSpentInHours() ) };
 

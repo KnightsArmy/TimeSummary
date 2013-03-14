@@ -41,6 +41,7 @@
             this.txtInput.Location = new System.Drawing.Point(15, 169);
             this.txtInput.Multiline = true;
             this.txtInput.Name = "txtInput";
+            this.txtInput.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.txtInput.Size = new System.Drawing.Size(1026, 261);
             this.txtInput.TabIndex = 0;
             this.txtInput.Text = "Input";
@@ -62,6 +63,7 @@
             this.txtOutput.Location = new System.Drawing.Point(14, 463);
             this.txtOutput.Multiline = true;
             this.txtOutput.Name = "txtOutput";
+            this.txtOutput.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.txtOutput.Size = new System.Drawing.Size(1026, 261);
             this.txtOutput.TabIndex = 2;
             this.txtOutput.Text = "Output";
