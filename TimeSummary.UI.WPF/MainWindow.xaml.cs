@@ -69,8 +69,10 @@ namespace TimeSummary.UI.WPF
                 // output the comments for each line item on a seperate line
                 foreach ( var comment in comments )
                 {
-                    outputString.AppendLine( string.Format( "          {0}", comment ) );
+                    outputString.AppendLine( string.Format( "{0}", comment.Replace( '\r', ' ' ) ) );
                 }
+
+                outputString.AppendLine();
             }
 
             // Output a summary line
