@@ -78,7 +78,7 @@ namespace TimeEntry.Models
 
         #region Static Members
 
-        public static TimeLineItem Parse( string timeLineEntry )
+        public static TimeLineItem Parse( string timeLineEntry, string businessDayStartTime = "8:00", string businessDayEndTime = "18:00" )
         {
             logger.Info( string.Format( "timeLineEntry: '{0}'", timeLineEntry ) );
 
@@ -102,11 +102,18 @@ namespace TimeEntry.Models
                 logger.Info( string.Format( "projectName: '{0}'", projectName ) );
                 logger.Info( string.Format( "comment: '{0}'", comment ) );
 
-                if ( !startTime.Contains( ':' ) )
-                    startTime += ":00";
+                startTime = TimeUtilities.AddMinutesField( startTime );
+                endTime = TimeUtilities.AddMinutesField( endTime );
 
-                if ( !endTime.Contains( ':' ) )
-                    endTime += ":00";
+                TimeSpan businessDayStartTimeSpan = TimeSpan.Parse( businessDayStartTime ); 
+                TimeSpan businessDayEndTimeSpan = TimeSpan.Parse( businessDayEndTime ); 
+
+                // if the user didn't specify an am or pm value we will default based on the configured business hours
+                if ( !startTime.Contains( 'm' )  && ! TimeUtilities.IsMilitaryTime( startTime ) )
+                    startTime = TimeUtilities.DefaultAMorPM( startTime, businessDayStartTimeSpan, businessDayEndTimeSpan );
+
+                if ( !endTime.Contains( 'm' )   && ! TimeUtilities.IsMilitaryTime( endTime ) )
+                    endTime = TimeUtilities.DefaultAMorPM( endTime, businessDayStartTimeSpan, businessDayEndTimeSpan );
 
                 TimeLineItem tli = new TimeLineItem()
                 {
@@ -123,7 +130,6 @@ namespace TimeEntry.Models
             else
                 throw new FormatException( "String was not recognized as a valid TimeLineItem." );
         }
-
         #endregion
     }
 }

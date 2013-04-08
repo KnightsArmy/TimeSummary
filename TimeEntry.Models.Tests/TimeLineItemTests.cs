@@ -145,6 +145,27 @@ namespace TimeEntry.Models.Tests
         }
 
         [TestMethod]
+        public void ParseTerseEntryWithAM()
+        {
+            // Arrange
+            string userEnteredStartTime = "9 am";
+            string startTimeAfterConversion = "9:00 am";
+            string userEnteredEndTime = "10 am";
+            string endTimeAfterConversion = "10:00 am";
+            string projectName = "AT";
+            string comment = "Timesheets & Emails";
+
+            // Act
+            TimeLineItem sut = TimeLineItem.Parse( string.Format( "{0}-{1} {2} {3}", userEnteredStartTime, userEnteredEndTime, projectName, comment ) );
+
+            // Assert
+            Assert.AreEqual( DateTime.Parse( startTimeAfterConversion ), sut.StartTime );
+            Assert.AreEqual( DateTime.Parse( endTimeAfterConversion ), sut.EndTime );
+            Assert.AreEqual( projectName, sut.ProjectName );
+            Assert.AreEqual( comment, sut.Comment );
+        }
+
+        [TestMethod]
         public void ParseWithoutComment()
         {
             // Arrange
