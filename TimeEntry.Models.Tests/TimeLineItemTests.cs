@@ -28,6 +28,25 @@ namespace TimeEntry.Models.Tests
         }
 
         [TestMethod]
+        public void ParseWithNoonInTime()
+        {
+            // Arrange
+            string startTime = "10:30";
+            string endTime = "12:00";
+            string projectName = "AT";
+            string comment = "Timesheets & Emails";
+
+            // Act
+            TimeLineItem sut = TimeLineItem.Parse( string.Format( "{0} - {1} {2} {3}", startTime, endTime, projectName, comment ) );
+
+            // Assert
+            Assert.AreEqual( DateTime.Parse( startTime ), sut.StartTime );
+            Assert.AreEqual( DateTime.Parse( endTime ), sut.EndTime );
+            Assert.AreEqual( projectName, sut.ProjectName );
+            Assert.AreEqual( comment, sut.Comment );
+        }
+
+        [TestMethod]
         public void ParseOddSpacingWithProjectEntry()
         {
             // Arrange

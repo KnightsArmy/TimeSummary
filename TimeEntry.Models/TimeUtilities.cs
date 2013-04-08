@@ -37,7 +37,9 @@ namespace TimeEntry.Models
 
             //if ( IsTimeOfDayBetween( DateTime.Parse( inputTime ), businessDayStartTime, businessDayEndTime ) )
             //{
-            if ( inputDouble < 12 && inputDouble > businessDayStartTime.TotalHours )
+            if ( inputDouble == 12 )
+                inputTime += " pm";
+            else if ( inputDouble < 12 && inputDouble > businessDayStartTime.TotalHours )
                 inputTime += " am";
             else
             {
