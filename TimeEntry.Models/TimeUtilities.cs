@@ -9,7 +9,8 @@ namespace TimeEntry.Models
 {
     public class TimeUtilities
     {
-        private const string _TimePattern = @"(\d*\d)(:\d*\d)*\s*([ap]m)*";
+        //private const string _TimePattern = @"(\d*\d):*(\d*\d)*\s*([ap]m)*";
+        private const string _TimePattern = @"(\d*\d):*(\d*\d)*\s*([ap]m)*";
 
         /// <summary>
         /// Any time without am or pm will be defaulted as follows
@@ -55,6 +56,87 @@ namespace TimeEntry.Models
             return inputTime;
         }
 
+        public static void DefaultAMorPM( ref string startTime, ref string endTime )
+        {
+            // if neither have am or pm and the absolute value of the end hours are less than the start hours default am for the start and pm for the end
+            // if one has am or pm but the other doesn't do the opposite.
+            Regex timeEntryRegEx = new Regex( _TimePattern );
+            Match startTimeMatch = timeEntryRegEx.Match( startTime );
+            Match endTimeMatch = timeEntryRegEx.Match( endTime );
+
+            if ( startTimeMatch.Success && endTimeMatch.Success )
+            {
+                int startHours = int.Parse( startTimeMatch.Groups[ 1 ].Value );
+                int startMinutes = 0;
+                if ( startTimeMatch.Groups[ 2 ].Value.Length > 0 )
+                    startMinutes = int.Parse( startTimeMatch.Groups[ 2 ].Value );
+
+                string startAmpm = startTimeMatch.Groups[ 3 ].Value;
+
+                int endHours = int.Parse( endTimeMatch.Groups[ 1 ].Value );
+                int endMinutes = 0;
+                if ( endTimeMatch.Groups[ 2 ].Value.Length > 0 )
+                    endMinutes = int.Parse( endTimeMatch.Groups[ 2 ].Value );
+                string endAmpm = endTimeMatch.Groups[ 3 ].Value;
+
+                if ( startAmpm.Length > 0 && endAmpm.Length > 0 )
+                    return;
+                else if ( startAmpm.Length == 0 && endAmpm.Length == 0 )
+                {
+                    if ( ( startHours + startMinutes / 60 > endHours + endMinutes / 60 ) && endHours == 12 )
+                    {
+                        startAmpm = "pm";
+                        endAmpm = "am";
+                    }
+                    else if ( startHours + startMinutes / 60 > endHours + endMinutes / 60 )
+                    {
+                        startAmpm = "am";
+                        endAmpm = "pm";
+                    }
+                    else if ( ( startHours + startMinutes / 60 < endHours + endMinutes / 60 ) && endHours == 12 )
+                    {
+                        startAmpm = "pm";
+                        endAmpm = "am";
+                    }
+                    else
+                    {
+                        startAmpm = "am";
+                        endAmpm = "am";
+                    }
+
+                }
+                else if ( startAmpm.Length == 0 && endAmpm.Length > 0 )
+                {
+                    if ( startHours + startMinutes / 60 > endHours + endMinutes / 60 )
+                    {
+                        if ( endAmpm.ToLower() == "am" ) startAmpm = "pm";
+                        if ( endAmpm.ToLower() == "pm" ) startAmpm = "am";
+                    }
+                    else
+                    {
+                        startAmpm = endAmpm;
+                    }
+                }
+                else // startAmPM has a value but end doesn't
+                {
+                    if ( startHours + startMinutes / 60 > endHours + endMinutes / 60 )
+                    {
+                        if ( startAmpm.ToLower() == "am" ) endAmpm = "pm";
+                        if ( startAmpm.ToLower() == "pm" ) endAmpm = "am";
+                    }
+                    else
+                    {
+                        endAmpm = startAmpm;
+                    }
+                }
+
+                startTime = FormatTimeString( startHours, startMinutes, startAmpm );
+                endTime = FormatTimeString( endHours, endMinutes, endAmpm );
+            }
+
+        }
+
+
         static public bool IsTimeOfDayBetween( DateTime time, TimeSpan startTime, TimeSpan endTime )
         {
             if ( endTime == startTime )
@@ -98,15 +180,27 @@ namespace TimeEntry.Models
 
             if ( m.Success && m.Groups[ 2 ].Value.Length == 0 )
             {
-                string hours = m.Groups[1].Value;
+                string hours = m.Groups[ 1 ].Value;
                 string minutes = "00";
-                string ampm = m.Groups[3].Value;
+                string ampm = m.Groups[ 3 ].Value;
 
-                time = string.Format( "{0}:{1}", hours, minutes );
-
-                if ( ! string.IsNullOrEmpty( ampm ) )
-                    time = string.Format( "{0} {1}", time, m.Groups[ 3 ].Value );
+                time = FormatTimeString( hours, minutes, ampm );
             }
+
+            return time;
+        }
+
+        static public string FormatTimeString( int hours, int minutes, string ampm )
+        {
+            return FormatTimeString( hours.ToString(), minutes.ToString(), ampm );
+        }
+
+        static public string FormatTimeString( string hours, string minutes, string ampm )
+        {
+            string time = string.Format( "{0}:{1}", hours, minutes );
+
+            if ( !string.IsNullOrEmpty( ampm ) )
+                time = string.Format( "{0} {1}", time, ampm );
 
             return time;
         }

@@ -89,6 +89,80 @@ namespace TimeEntry.Models.Tests
             string result = TimeUtilities.DefaultAMorPM( time, businessDayStartTime, businessDayEndTime );
         }
 
+        [TestMethod]
+        public void DefaultAMorPMWithoutCrossingNoonNoAmOrPm()
+        {
+            // Arrange
+            string startTime = "1:30";
+            string endTime = "3:30";
+
+            // Act
+            TimeUtilities.DefaultAMorPM( ref startTime, ref endTime );
+
+            // Assert
+            Assert.AreEqual( "1:30 am", startTime );
+            Assert.AreEqual( "3:30 am", endTime );
+        }
+
+        [TestMethod]
+        public void DefaultAMorPMWithoutCrossingNoonOneAm()
+        {
+            // Arrange
+            string startTime = "1:30 am";
+            string endTime = "3:30";
+
+            // Act
+            TimeUtilities.DefaultAMorPM( ref startTime, ref endTime );
+
+            // Assert
+            Assert.AreEqual( "1:30 am", startTime );
+            Assert.AreEqual( "3:30 am", endTime );
+        }
+
+        [TestMethod]
+        public void DefaultAMorPMCrossingNoonNoAMorPM()
+        {
+            // Arrange
+            string startTime = "11:30";
+            string endTime = "2:30";
+
+            // Act
+            TimeUtilities.DefaultAMorPM( ref startTime, ref endTime );
+
+            // Assert
+            Assert.AreEqual( "11:30 am", startTime );
+            Assert.AreEqual( "2:30 pm", endTime );
+        }
+
+        [TestMethod]
+        public void DefaultAMorPMCrossingNoonWithOneAM()
+        {
+            // Arrange
+            string startTime = "11:30 am";
+            string endTime = "2:30";
+
+            // Act
+            TimeUtilities.DefaultAMorPM( ref startTime, ref endTime );
+
+            // Assert
+            Assert.AreEqual( "11:30 am", startTime );
+            Assert.AreEqual( "2:30 pm", endTime );
+        }
+
+        [TestMethod]
+        public void DefaultAMorPMCrossingNoonWithOnePM()
+        {
+            // Arrange
+            string startTime = "11:30 pm";
+            string endTime = "2:30";
+
+            // Act
+            TimeUtilities.DefaultAMorPM( ref startTime, ref endTime );
+
+            // Assert
+            Assert.AreEqual( "11:30 pm", startTime );
+            Assert.AreEqual( "2:30 am", endTime );
+        }
 
         [TestMethod]
         public void IsMilitaryTimeExpectTrue()

@@ -50,8 +50,6 @@ namespace TimeEntry.Models
                 DateTime midnight = DateTime.Parse( "12:00 am" );
 
                 // Since the user isn't entering days and only times in the controls we have to do some funky math
-                // ToDo: Handle this situation on the parsing method so this method can be simplified
-                // ToDo: I now have the unit tests to support such refactoring! :)
                 double minutesBeforeMidnight = ( 24.0 * 60.0 ) + ( midnight - this.StartTime ).TotalMinutes;
                 double minutesAfterMidnight  = ( this.EndTime - midnight ).TotalMinutes;
 
@@ -78,7 +76,7 @@ namespace TimeEntry.Models
 
         #region Static Members
 
-        public static TimeLineItem Parse( string timeLineEntry, string businessDayStartTime = "8:00", string businessDayEndTime = "18:00" )
+        public static TimeLineItem Parse( string timeLineEntry )
         {
             logger.Info( string.Format( "timeLineEntry: '{0}'", timeLineEntry ) );
 
@@ -105,15 +103,11 @@ namespace TimeEntry.Models
                 startTime = TimeUtilities.AddMinutesField( startTime );
                 endTime = TimeUtilities.AddMinutesField( endTime );
 
-                TimeSpan businessDayStartTimeSpan = TimeSpan.Parse( businessDayStartTime ); 
-                TimeSpan businessDayEndTimeSpan = TimeSpan.Parse( businessDayEndTime ); 
-
-                // if the user didn't specify an am or pm value we will default based on the configured business hours
-                if ( !startTime.Contains( 'm' )  && ! TimeUtilities.IsMilitaryTime( startTime ) )
-                    startTime = TimeUtilities.DefaultAMorPM( startTime, businessDayStartTimeSpan, businessDayEndTimeSpan );
-
-                if ( !endTime.Contains( 'm' )   && ! TimeUtilities.IsMilitaryTime( endTime ) )
-                    endTime = TimeUtilities.DefaultAMorPM( endTime, businessDayStartTimeSpan, businessDayEndTimeSpan );
+                // if neither time is military time then we need to default am and pm
+                if ( ! TimeUtilities.IsMilitaryTime( startTime ) && ! TimeUtilities.IsMilitaryTime( endTime ) )
+                {
+                    TimeUtilities.DefaultAMorPM( ref startTime, ref endTime );
+                }
 
                 TimeLineItem tli = new TimeLineItem()
                 {

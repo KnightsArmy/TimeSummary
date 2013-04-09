@@ -40,8 +40,8 @@ namespace TimeEntry.Models.Tests
             TimeLineItem sut = TimeLineItem.Parse( string.Format( "{0} - {1} {2} {3}", startTime, endTime, projectName, comment ) );
 
             // Assert
-            Assert.AreEqual( DateTime.Parse( startTime ), sut.StartTime );
-            Assert.AreEqual( DateTime.Parse( endTime ), sut.EndTime );
+            Assert.AreEqual( DateTime.Parse( startTime + " pm" ), sut.StartTime );
+            Assert.AreEqual( DateTime.Parse( endTime + " am" ), sut.EndTime );
             Assert.AreEqual( projectName, sut.ProjectName );
             Assert.AreEqual( comment, sut.Comment );
         }
@@ -101,6 +101,26 @@ namespace TimeEntry.Models.Tests
             Assert.AreEqual( DateTime.Parse( endTime ), sut.EndTime );
             Assert.AreEqual( projectName, sut.ProjectName );
             Assert.AreEqual( comment, sut.Comment );
+        }
+
+        [TestMethod]
+        public void ParseEntryWithoutAMorPMOutsideTraditionalBusinessHours()
+        {
+            // Arrange
+            string startTime = "4:00";
+            string endTime = "7:30";
+            string projectName = "AT";
+            string comment = "Timesheets & Emails";
+
+            // Act
+            TimeLineItem sut = TimeLineItem.Parse( string.Format( "{0} - {1} {2} {3}", startTime, endTime, projectName, comment ) );
+
+            // Assert
+            Assert.AreEqual( DateTime.Parse( startTime ), sut.StartTime );
+            Assert.AreEqual( DateTime.Parse( endTime ), sut.EndTime );
+            Assert.AreEqual( projectName, sut.ProjectName );
+            Assert.AreEqual( comment, sut.Comment );
+            Assert.AreEqual( 3.5, sut.TimeSpentInHours() );
         }
 
         [TestMethod]
