@@ -1,0 +1,38 @@
+﻿<Controls:MetroWindow x:Class="TimeSummary.UI.WPF.HelpWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+        Title="Help" Height="350" Width="380">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Colours.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/Blue.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseLight.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+    <Grid>
+        <StackPanel>
+            <TextBlock Margin="10,10,0,0">Usage:   I track my time in Evernote so that I can update</TextBlock>
+            <TextBlock Margin="10,0,0,0">it anywhere. I then cut and paste the tracking details into</TextBlock>
+            <TextBlock Margin="10,0,0,0">this application for a quick summary so I don't have manually</TextBlock>
+            <TextBlock Margin="10,0,0,0">calculate it.</TextBlock>
+
+            <TextBlock Margin="10">Format:  StartTime - EndTime Project [Comment]</TextBlock>
+
+            <TextBlock Margin="10,0,10,10">Example (The time format is very forgiving)</TextBlock>
+            <TextBlock Margin="10,0,0,0">8:15 am - 8:45 am AT Emails</TextBlock>
+            <TextBlock Margin="10,0,0,0">8:45 am - 9:00 am SU Eric's Standup</TextBlock>
+            <TextBlock Margin="10,0,0,0">9 - 9:15 AT</TextBlock>
+            <TextBlock Margin="10,0,0,0">9:15 - 10:00 am SU Clerk Edition, Judge Edition, and Jail Standups</TextBlock>
+            <TextBlock Margin="10,0,0,0">10:00 am - 11:00 am 7197 Design Session with Hugo, Sarah</TextBlock>
+            <TextBlock Margin="10,0,0,0">11:00 - 12:30 7200</TextBlock>
+            <TextBlock Margin="10,0,0,0">13:30 - 14:30 7200</TextBlock>
+            <TextBlock Margin="10,0,0,0">2:30 - 4:30 DM Eric's Direct's Meeting</TextBlock>
+        </StackPanel>
+
+    </Grid>
+</Controls:MetroWindow>

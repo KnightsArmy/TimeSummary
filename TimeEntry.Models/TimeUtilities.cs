@@ -9,7 +9,6 @@ namespace TimeEntry.Models
 {
     public class TimeUtilities
     {
-        //private const string _TimePattern = @"(\d*\d):*(\d*\d)*\s*([ap]m)*";
         private const string _TimePattern = @"(\d*\d):*(\d*\d)*\s*([ap]m)*";
 
         /// <summary>

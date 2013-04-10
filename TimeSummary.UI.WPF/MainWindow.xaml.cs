@@ -82,5 +82,11 @@ namespace TimeSummary.UI.WPF
 
             txtOutput.Text = outputString.ToString();
         }
+
+        private void txtHelp_Click( object sender, RoutedEventArgs e )
+        {
+            var helpWindow = new HelpWindow();
+            helpWindow.Show();
+        }
     }
 }
