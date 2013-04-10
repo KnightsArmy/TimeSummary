@@ -1,5 +1,5 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 
 namespace TimeEntry.Models.Tests
 {
@@ -25,6 +25,25 @@ namespace TimeEntry.Models.Tests
             Assert.AreEqual( DateTime.Parse( endTime ), sut.EndTime );
             Assert.AreEqual( projectName, sut.ProjectName );
             Assert.AreEqual( comment, sut.Comment );
+        }
+
+        [TestMethod]
+        public void ParseLowercaseProjectVerboseEntry()
+        {
+          // Arrange
+          string startTime = "9:00 am";
+          string endTime = "9:30 am";
+          string projectName = "stuff";
+          string comment = "Timesheets & Emails";
+
+          // Act
+          TimeLineItem sut = TimeLineItem.Parse(string.Format("{0} - {1} {2} {3}", startTime, endTime, projectName, comment));
+
+          // Assert
+          Assert.AreEqual(DateTime.Parse(startTime), sut.StartTime);
+          Assert.AreEqual(DateTime.Parse(endTime), sut.EndTime);
+          Assert.AreEqual(projectName, sut.ProjectName);
+          Assert.AreEqual(comment, sut.Comment);
         }
 
         [TestMethod]
