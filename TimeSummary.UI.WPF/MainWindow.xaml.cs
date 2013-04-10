@@ -39,7 +39,7 @@ namespace TimeSummary.UI.WPF
             {
                 try
                 {
-                    if ( timeEntry != string.Empty && timeEntry != "\r" ) lineItems.Add( TimeLineItem.Parse( timeEntry ) );
+                    if ( timeEntry != string.Empty && timeEntry != "\r" && timeEntry != "Paste Text Here\r" && timeEntry != "Paste Text Here" ) lineItems.Add( TimeLineItem.Parse( timeEntry ) );
                 }
                 catch
                 {
@@ -60,7 +60,7 @@ namespace TimeSummary.UI.WPF
             foreach ( var li in timeGroups )
             {
                 // output the total time spent for the day on a bucket
-                outputString.AppendLine( string.Format( "{0,-5}{1:0.00} Hours", li.ProjectName, li.TotalHours ) );
+                outputString.AppendLine( string.Format( "{0}   {1:0.00} Hours", li.ProjectName, li.TotalHours ) );
 
                 var comments = from cli in lineItems
                                where cli.ProjectName == li.ProjectName && cli.Comment != string.Empty

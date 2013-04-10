@@ -45,7 +45,7 @@
                 </Viewbox>
             </Button>
         </StackPanel>
-        <TextBox Name="txtInput" Grid.Row="1" AcceptsReturn="True"/>
+        <TextBox Name="txtInput" Grid.Row="1" AcceptsReturn="True" Text="Paste Text Here" />
         <Button Name="btnParse" Content="Parse" Grid.Row="2" Click="btnParse_Click" />
         <TextBox Name="txtOutput" Grid.Row="3" VerticalScrollBarVisibility="Auto"/>
     </Grid>
