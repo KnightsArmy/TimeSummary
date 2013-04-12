@@ -2,7 +2,11 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
-        Title="Time Summary" Height="750" Width="525">
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:TimeSummary.UI.WPF"
+        d:DataContext="{d:DesignInstance local:TimeEntryViewModel}"
+        Title="Time Summary" Height="750" Width="525" mc:Ignorable="d">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -45,8 +49,8 @@
                 </Viewbox>
             </Button>
         </StackPanel>
-        <TextBox Name="txtInput" Grid.Row="1" AcceptsReturn="True" Text="Paste Text Here" />
-        <Button Name="btnParse" Content="Parse" Grid.Row="2" Click="btnParse_Click" />
-        <TextBox Name="txtOutput" Grid.Row="3" VerticalScrollBarVisibility="Auto"/>
+        <TextBox Name="txtInput" Grid.Row="1" AcceptsReturn="True" Text="{Binding TimeEntryInput, Mode=TwoWay}" />
+        <Button Name="btnParse" Content="Parse" Grid.Row="2" Command="{Binding ParseCommand}" />
+        <TextBox Name="txtOutput" Grid.Row="3" VerticalScrollBarVisibility="Auto" Text="{Binding TimeEntryOutput}"/>
     </Grid>
 </Controls:MetroWindow>

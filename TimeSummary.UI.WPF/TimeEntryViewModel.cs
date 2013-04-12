@@ -1,0 +1,108 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.Command;
+using TimeEntry.Models;
+using System.Windows.Input;
+using System.Windows;
+
+namespace TimeSummary.UI.WPF
+{
+    public class TimeEntryViewModel : ObservableObject
+    {
+        private string _timeEntryInput;
+        private string _timeEntryOutput;
+
+        public string TimeEntryInput
+        {
+            get { return _timeEntryInput; }
+            set
+            {
+                base.Set( () => TimeEntryInput, ref _timeEntryInput, value );
+            }
+        }
+
+        public string TimeEntryOutput
+        {
+            get { return _timeEntryOutput; }
+            set
+            {
+                base.Set( () => TimeEntryOutput, ref _timeEntryOutput, value );
+            }
+        }
+
+        public const string InputHelpText = "Paste Text Here";
+
+        public ICommand ParseCommand { get; private set; }
+
+
+
+        public TimeEntryViewModel()
+        {
+            this.ParseCommand = new RelayCommand( ParseCommandOnExecute, ParseCommandCanExecute );
+            this.TimeEntryInput = InputHelpText;
+        }
+
+        private bool ParseCommandCanExecute()
+        {
+            return !string.IsNullOrWhiteSpace( this.TimeEntryInput );
+        }
+
+        private void ParseCommandOnExecute()
+        {
+            string total = string.Empty;
+            List<TimeLineItem> lineItems = new List<TimeLineItem>();
+
+            foreach ( string timeEntry in this.TimeEntryInput.Split( '\n' ) )
+            {
+                try
+                {
+                    if ( timeEntry != string.Empty && timeEntry != "\r" && timeEntry != ( InputHelpText + "\r" ) && timeEntry != InputHelpText ) lineItems.Add( TimeLineItem.Parse( timeEntry ) );
+                }
+                catch
+                {
+                    MessageBox.Show( string.Format( "Couldn't parse: {0}", timeEntry ) );
+                }
+
+            }
+
+            StringBuilder outputString = new StringBuilder();
+
+            var timeGroups = from li in lineItems
+                             group li by li.ProjectName.ToUpper() into g
+                             orderby g.Key
+                             select new { ProjectName = g.Key, TotalHours = g.Sum( li => li.TimeSpentInHours() ) };
+
+
+
+            foreach ( var li in timeGroups )
+            {
+                // output the total time spent for the day on a bucket
+                outputString.AppendLine( string.Format( "{0}   {1:0.00} Hours", li.ProjectName, li.TotalHours ) );
+
+                var comments = from cli in lineItems
+                               where cli.ProjectName == li.ProjectName && cli.Comment != string.Empty
+                               select cli.Comment;
+
+                // output the comments for each line item on a seperate line
+                foreach ( var comment in comments )
+                {
+                    outputString.AppendLine( string.Format( "{0}", comment.Replace( '\r', ' ' ) ) );
+                }
+
+                outputString.AppendLine();
+            }
+
+            // Output a summary line
+            outputString.AppendLine( "----------------------------------------------------------" );
+            outputString.AppendLine( string.Format( "Total Time Worked: {0:0.00} Hours", timeGroups.Sum( x => x.TotalHours ) ) );
+
+
+            this.TimeEntryOutput = outputString.ToString();
+
+        }
+    }
+}
