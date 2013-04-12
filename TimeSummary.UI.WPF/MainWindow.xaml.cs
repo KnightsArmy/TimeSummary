@@ -1,18 +1,9 @@
 ﻿using MahApps.Metro.Controls;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
 using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using TimeEntry.Models;
 
 namespace TimeSummary.UI.WPF
@@ -53,17 +44,17 @@ namespace TimeSummary.UI.WPF
             var timeGroups = from li in lineItems
                              group li by li.ProjectName.ToUpper() into g
                              orderby g.Key
-                             select new { ProjectName = g.Key, TotalHours = g.Sum( li => li.TimeSpentInHours() ) };
+                             select new { UpperCaseProjectName = g.Key, TotalHours = g.Sum( li => li.TimeSpentInHours() ) };
 
 
 
             foreach ( var li in timeGroups )
             {
                 // output the total time spent for the day on a bucket
-                outputString.AppendLine( string.Format( "{0}   {1:0.00} Hours", li.ProjectName, li.TotalHours ) );
+                outputString.AppendLine( string.Format( "{0}   {1:0.00} Hours", li.UpperCaseProjectName, li.TotalHours ) );
 
                 var comments = from cli in lineItems
-                               where cli.ProjectName == li.ProjectName && cli.Comment != string.Empty
+                               where cli.ProjectName.ToUpper() == li.UpperCaseProjectName && cli.Comment != string.Empty
                                select cli.Comment;
 
                 // output the comments for each line item on a seperate line
