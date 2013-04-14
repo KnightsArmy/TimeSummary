@@ -1,36 +1,70 @@
 ﻿using MahApps.Metro.Controls;
+﻿using System;
+using System.Collections.Generic;
+using System.Windows;
+using System.Windows.Documents;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Windows;
-using System.Windows.Documents;
+using System.Threading.Tasks;
+using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.Command;
 using TimeEntry.Models;
+using System.Windows.Input;
+using System.Windows;
 
 namespace TimeSummary.UI.WPF
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
-    public partial class MainWindow : MetroWindow
+    public class TimeEntryViewModel : ObservableObject
     {
-        public MainWindow()
+        private string _timeEntryInput;
+        private string _timeEntryOutput;
+
+        public string TimeEntryInput
         {
-            InitializeComponent();
+            get { return _timeEntryInput; }
+            set
+            {
+                base.Set( () => TimeEntryInput, ref _timeEntryInput, value );
+            }
         }
 
-        private void btnParse_Click( object sender, RoutedEventArgs e )
+        public string TimeEntryOutput
         {
-            // Testing Logging
-            //logger.Info( "Test" );
+            get { return _timeEntryOutput; }
+            set
+            {
+                base.Set( () => TimeEntryOutput, ref _timeEntryOutput, value );
+            }
+        }
 
+        public const string InputHelpText = "Paste Text Here";
+
+        public ICommand ParseCommand { get; private set; }
+
+
+
+        public TimeEntryViewModel()
+        {
+            this.ParseCommand = new RelayCommand( ParseCommandOnExecute, ParseCommandCanExecute );
+            this.TimeEntryInput = InputHelpText;
+        }
+
+        private bool ParseCommandCanExecute()
+        {
+            return !string.IsNullOrWhiteSpace( this.TimeEntryInput );
+        }
+
+        private void ParseCommandOnExecute()
+        {
             string total = string.Empty;
             List<TimeLineItem> lineItems = new List<TimeLineItem>();
 
-            foreach ( string timeEntry in txtInput.Text.Split( '\n' ) )
+            foreach ( string timeEntry in this.TimeEntryInput.Split( '\n' ) )
             {
                 try
                 {
-                    if ( timeEntry != string.Empty && timeEntry != "\r" && timeEntry != "Paste Text Here\r" && timeEntry != "Paste Text Here" ) lineItems.Add( TimeLineItem.Parse( timeEntry ) );
+                    if ( timeEntry != string.Empty && timeEntry != "\r" && timeEntry != ( InputHelpText + "\r" ) && timeEntry != InputHelpText ) lineItems.Add( TimeLineItem.Parse( timeEntry ) );
                 }
                 catch
                 {
@@ -71,13 +105,8 @@ namespace TimeSummary.UI.WPF
             outputString.AppendLine( string.Format( "Total Time Worked: {0:0.00} Hours", timeGroups.Sum( x => x.TotalHours ) ) );
 
 
-            txtOutput.Text = outputString.ToString();
-        }
+            this.TimeEntryOutput = outputString.ToString();
 
-        private void txtHelp_Click( object sender, RoutedEventArgs e )
-        {
-            var helpWindow = new HelpWindow();
-            helpWindow.Show();
         }
     }
 }
