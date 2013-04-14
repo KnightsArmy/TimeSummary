@@ -20,9 +20,9 @@ namespace TimeSummary.UI.WPF
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : MetroWindow
+    public partial class TimeEntryWindow : MetroWindow
     {
-        public MainWindow()
+        public TimeEntryWindow()
         {
             this.DataContext = new TimeEntryViewModel();
             InitializeComponent();
