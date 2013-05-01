@@ -87,7 +87,7 @@ namespace TimeEntry.Models
                         startAmpm = "pm";
                         endAmpm = "am";
                     }
-                    else if ( startHours + startMinutes / 60 > endHours + endMinutes / 60 )
+                    else if ( ( startHours + startMinutes / 60 > endHours + endMinutes / 60 ) && startHours != 12 )
                     {
                         startAmpm = "am";
                         endAmpm = "pm";
@@ -191,7 +191,7 @@ namespace TimeEntry.Models
 
         static public string FormatTimeString( int hours, int minutes, string ampm )
         {
-            return FormatTimeString( hours.ToString(), minutes.ToString(), ampm );
+            return FormatTimeString( hours.ToString(), string.Format( "{0:00}", minutes ), ampm );
         }
 
         static public string FormatTimeString( string hours, string minutes, string ampm )

@@ -135,6 +135,22 @@ namespace TimeEntry.Models.Tests
         }
 
         [TestMethod]
+        public void DefaultAMorPMStartingNoonNoAMorPM()
+        {
+            // Arrange
+            string startTime = "12:00";
+            string endTime = "2:30";
+
+            // Act
+            TimeUtilities.DefaultAMorPM( ref startTime, ref endTime );
+
+            // Assert
+            Assert.AreEqual( "12:00 am", startTime );
+            Assert.AreEqual( "2:30 am", endTime );
+        }
+
+
+        [TestMethod]
         public void DefaultAMorPMCrossingNoonWithOneAM()
         {
             // Arrange
@@ -229,6 +245,16 @@ namespace TimeEntry.Models.Tests
 
             // Assert
             Assert.AreEqual( "9:00 am", result );
+        }
+
+        [TestMethod]
+        public void FormatTimeWithZeroMinutesWithInts()
+        {
+            // Act
+            string result = TimeUtilities.FormatTimeString( 12, 0, "am" );
+
+            // Assert
+            Assert.AreEqual( "12:00 am", result );
         }
     }
 }

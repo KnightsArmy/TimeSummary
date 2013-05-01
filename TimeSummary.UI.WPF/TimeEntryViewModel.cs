@@ -47,12 +47,12 @@ namespace TimeSummary.UI.WPF
         public TimeEntryViewModel()
         {
             this.ParseCommand = new RelayCommand( ParseCommandOnExecute, ParseCommandCanExecute );
-            this.TimeEntryInput = InputHelpText;
+            //this.TimeEntryInput = InputHelpText;
         }
 
         private bool ParseCommandCanExecute()
         {
-            return !string.IsNullOrWhiteSpace( this.TimeEntryInput );
+            return true;
         }
 
         private void ParseCommandOnExecute()
@@ -64,7 +64,7 @@ namespace TimeSummary.UI.WPF
             {
                 try
                 {
-                    if ( timeEntry != string.Empty && timeEntry != "\r" && timeEntry != ( InputHelpText + "\r" ) && timeEntry != InputHelpText ) lineItems.Add( TimeLineItem.Parse( timeEntry ) );
+                    if ( timeEntry != string.Empty && timeEntry != "\r" ) lineItems.Add( TimeLineItem.Parse( timeEntry ) );
                 }
                 catch
                 {
