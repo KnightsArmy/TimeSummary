@@ -1,10 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using log4net;
 
 namespace TimeEntry.Models
 {
@@ -18,7 +13,7 @@ namespace TimeEntry.Models
         private const string ProjectGroup = "projectName";
         private const string CommentGroup = "comment";
         private const string TimePattern = @"\d*\d(:\d*\d)*\s*([ap]m)*";
-        private static string TimeLineEntryPattern = string.Format( @"(?<{1}>{0})\s*-\s*(?<{2}>{0})\s+(?<{3}>\w+)\s*(?<{4}>.*$)",
+        private static string TimeLineEntryPattern = string.Format( @"(?<{1}>{0})\s*-\s*(?<{2}>{0})\s+(?<{3}>\S+)\s*(?<{4}>.*$)",
             TimePattern,
             StartTimeGroup,
             EndTimeGroup,

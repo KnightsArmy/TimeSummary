@@ -244,6 +244,27 @@ namespace TimeEntry.Models.Tests
             Assert.AreEqual( string.Empty, sut.Comment );
         }
 
+      [TestMethod]
+      public void ParseQuestionMarkProjectName()
+      {
+        // Arrange
+        string userEnteredStartTime = "9";
+        string userEnteredEndTime = "10";
+        string projectName = "?";
+
+        string startTimeAfterConversion = userEnteredStartTime + ":00";
+        string endTimeAfterConversion = userEnteredEndTime + ":00";
+
+        // Act
+        TimeLineItem sut = TimeLineItem.Parse(string.Format("{0}-{1} {2}", userEnteredStartTime, userEnteredEndTime, projectName));
+
+        // Assert
+        Assert.AreEqual(DateTime.Parse(startTimeAfterConversion), sut.StartTime);
+        Assert.AreEqual(DateTime.Parse(endTimeAfterConversion), sut.EndTime);
+        Assert.AreEqual(projectName, sut.ProjectName);
+        Assert.AreEqual(string.Empty, sut.Comment);
+      }
+
         [TestMethod]
         [ExpectedException( typeof( FormatException ) )]
         public void ParseWithoutProjectName()
