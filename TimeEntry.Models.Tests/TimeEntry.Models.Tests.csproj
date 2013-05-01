@@ -51,6 +51,7 @@
   </Choose>
   <ItemGroup>
     <Compile Include="TimeUtilitiesTests.cs" />
+    <Compile Include="TimeSummaryItemTests.cs" />
     <Compile Include="TimeLineItemTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
