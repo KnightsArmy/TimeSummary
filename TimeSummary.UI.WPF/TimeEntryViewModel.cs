@@ -55,11 +55,8 @@ namespace TimeSummary.UI.WPF
             return true;
         }
 
-        private void ParseCommandOnExecute()
+        private void ParseContentsOfInputBox( List<TimeLineItem> lineItems )
         {
-            string total = string.Empty;
-            List<TimeLineItem> lineItems = new List<TimeLineItem>();
-
             foreach ( string timeEntry in this.TimeEntryInput.Split( '\n' ) )
             {
                 try
@@ -70,8 +67,25 @@ namespace TimeSummary.UI.WPF
                 {
                     MessageBox.Show( string.Format( "Couldn't parse: {0}", timeEntry ) );
                 }
-
             }
+        }
+
+        public List<TimeSummaryItem> CreateTimeSummaryLists( List<TimeLineItem> lineItems )
+        {
+            var timeGroups = ( from li in lineItems
+                               group li by li.ProjectName.ToUpper() into g
+                               orderby g.Key
+                               select new TimeSummaryItem { ProjectName = g.Key, TimeSpentInHours = g.Sum( li => li.TimeSpentInHours() ) } ).ToList();
+
+            return timeGroups;
+        }
+
+        private void ParseCommandOnExecute()
+        {
+            string total = string.Empty;
+            List<TimeLineItem> lineItems = new List<TimeLineItem>();
+
+            this.ParseContentsOfInputBox( lineItems );
 
             StringBuilder outputString = new StringBuilder();
 
@@ -80,7 +94,7 @@ namespace TimeSummary.UI.WPF
                              orderby g.Key
                              select new { UpperCaseProjectName = g.Key, TotalHours = g.Sum( li => li.TimeSpentInHours() ) };
 
-
+            List<TimeSummaryItem> timeSummaryItems = this.CreateTimeSummaryLists( lineItems );
 
             foreach ( var li in timeGroups )
             {
