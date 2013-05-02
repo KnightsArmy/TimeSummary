@@ -19,6 +19,8 @@ namespace TimeSummary.UI.WPF
     {
         private string _timeEntryInput;
         private string _timeEntryOutput;
+        private List<TimeLineItem> _timeLineItems;
+        private List<TimeSummaryItem> _timeSummaryItems;
 
         public string TimeEntryInput
         {
@@ -38,16 +40,31 @@ namespace TimeSummary.UI.WPF
             }
         }
 
-        public const string InputHelpText = "Paste Text Here";
+        public List<TimeLineItem> TimeLineItems
+        {
+            get { return _timeLineItems; }
+            set
+            {
+                base.Set( () => TimeLineItems, ref _timeLineItems, value );
+            }
+        }
+
+        public List<TimeSummaryItem> TimeSummaryItems
+        {
+            get { return _timeSummaryItems; }
+            set
+            {
+                base.Set( () => TimeSummaryItems, ref _timeSummaryItems, value );
+            }
+        }
 
         public ICommand ParseCommand { get; private set; }
-
-
 
         public TimeEntryViewModel()
         {
             this.ParseCommand = new RelayCommand( ParseCommandOnExecute, ParseCommandCanExecute );
-            //this.TimeEntryInput = InputHelpText;
+            this.TimeLineItems = new List<TimeLineItem>();
+            this.TimeSummaryItems = new List<TimeSummaryItem>();
         }
 
         private bool ParseCommandCanExecute()
@@ -55,13 +72,13 @@ namespace TimeSummary.UI.WPF
             return true;
         }
 
-        private void ParseContentsOfInputBox( List<TimeLineItem> lineItems )
+        private void ParseContentsOfInputBox()
         {
             foreach ( string timeEntry in this.TimeEntryInput.Split( '\n' ) )
             {
                 try
                 {
-                    if ( timeEntry != string.Empty && timeEntry != "\r" ) lineItems.Add( TimeLineItem.Parse( timeEntry ) );
+                    if ( timeEntry != string.Empty && timeEntry != "\r" ) this.TimeLineItems.Add( TimeLineItem.Parse( timeEntry ) );
                 }
                 catch
                 {
@@ -70,43 +87,49 @@ namespace TimeSummary.UI.WPF
             }
         }
 
-        public List<TimeSummaryItem> CreateTimeSummaryLists( List<TimeLineItem> lineItems )
+        public void CreateTimeSummaryLists()
         {
-            var timeGroups = ( from li in lineItems
-                               group li by li.ProjectName.ToUpper() into g
-                               orderby g.Key
-                               select new TimeSummaryItem { ProjectName = g.Key, TimeSpentInHours = g.Sum( li => li.TimeSpentInHours() ) } ).ToList();
+            this.TimeSummaryItems = ( from li in this.TimeLineItems
+                                      group li by li.ProjectName.ToUpper() into g
+                                      orderby g.Key
+                                      select new TimeSummaryItem { ProjectName = g.Key, TimeSpentInHours = g.Sum( li => li.TimeSpentInHours() ) } ).ToList();
 
-            return timeGroups;
+            this.AddCommentsToSummaryItems();
         }
 
-        private void ParseCommandOnExecute()
+        private void ResetTimeEntries()
         {
-            string total = string.Empty;
-            List<TimeLineItem> lineItems = new List<TimeLineItem>();
+            this.TimeLineItems.Clear();
+            this.TimeSummaryItems.Clear();
+        }
 
-            this.ParseContentsOfInputBox( lineItems );
-
-            StringBuilder outputString = new StringBuilder();
-
-            var timeGroups = from li in lineItems
-                             group li by li.ProjectName.ToUpper() into g
-                             orderby g.Key
-                             select new { UpperCaseProjectName = g.Key, TotalHours = g.Sum( li => li.TimeSpentInHours() ) };
-
-            List<TimeSummaryItem> timeSummaryItems = this.CreateTimeSummaryLists( lineItems );
-
-            foreach ( var li in timeGroups )
+        public void AddCommentsToSummaryItems()
+        {
+            foreach ( var li in this.TimeSummaryItems )
             {
-                // output the total time spent for the day on a bucket
-                outputString.AppendLine( string.Format( "{0}   {1:0.00} Hours", li.UpperCaseProjectName, li.TotalHours ) );
-
-                var comments = from cli in lineItems
-                               where cli.ProjectName.ToUpper() == li.UpperCaseProjectName && cli.Comment != string.Empty
+                var comments = from cli in this.TimeLineItems
+                               where cli.ProjectName.ToUpper() == li.ProjectName.ToUpper() && cli.Comment != string.Empty
                                select cli.Comment;
 
                 // output the comments for each line item on a seperate line
                 foreach ( var comment in comments )
+                {
+                    li.Comments.Add( comment );
+                }
+            }
+        }
+
+        public string FormatOutput()
+        {
+            StringBuilder outputString = new StringBuilder();
+
+            foreach ( var li in this.TimeSummaryItems )
+            {
+                // output the total time spent for the day on a bucket
+                outputString.AppendLine( string.Format( "{0}   {1:0.00} Hours", li.ProjectName, li.TimeSpentInHours ) );
+
+                // output the comments for each line item on a seperate line
+                foreach ( var comment in li.Comments )
                 {
                     outputString.AppendLine( string.Format( "{0}", comment.Replace( '\r', ' ' ) ) );
                 }
@@ -116,11 +139,17 @@ namespace TimeSummary.UI.WPF
 
             // Output a summary line
             outputString.AppendLine( "----------------------------------------------------------" );
-            outputString.AppendLine( string.Format( "Total Time Worked: {0:0.00} Hours", timeGroups.Sum( x => x.TotalHours ) ) );
+            outputString.AppendLine( string.Format( "Total Time Worked: {0:0.00} Hours", this.TimeSummaryItems.Sum( x => x.TimeSpentInHours ) ) );
 
+            return outputString.ToString();
+        }
 
-            this.TimeEntryOutput = outputString.ToString();
-
+        private void ParseCommandOnExecute()
+        {
+            this.ResetTimeEntries();
+            this.ParseContentsOfInputBox();
+            this.CreateTimeSummaryLists();
+            this.TimeEntryOutput = this.FormatOutput();
         }
     }
 }

@@ -24,10 +24,11 @@ namespace TimeSummary.UI.Tests
 
             // Act
             TimeEntryViewModel sut = new TimeEntryViewModel();
-            List<TimeSummaryItem> results = sut.CreateTimeSummaryLists( items );
+            sut.TimeLineItems = items;
+            sut.CreateTimeSummaryLists();
 
             // Assert
-            Assert.AreEqual( 2, results.Count );
+            Assert.AreEqual( 2, sut.TimeSummaryItems.Count );
         }
     }
 }
