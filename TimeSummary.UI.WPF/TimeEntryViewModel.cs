@@ -3,7 +3,6 @@
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Documents;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,7 +10,6 @@ using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using TimeEntry.Models;
 using System.Windows.Input;
-using System.Windows;
 
 namespace TimeSummary.UI.WPF
 {
