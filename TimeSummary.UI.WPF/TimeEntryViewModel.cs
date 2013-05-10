@@ -59,12 +59,39 @@ namespace TimeSummary.UI.WPF
         }
 
         public ICommand ParseCommand { get; private set; }
+        public ICommand CopyCommentToClipboardCommand { get; private set; }
 
         public TimeEntryViewModel()
         {
             this.ParseCommand = new RelayCommand( ParseCommandOnExecute, ParseCommandCanExecute );
+            this.CopyCommentToClipboardCommand = new RelayCommand<string>( CopyCommentToClipboardCommandOnExecute, CopyCommentToClipboardCommandCanExecute );
             this.TimeLineItems = new List<TimeLineItem>();
             this.TimeSummaryItems = new List<TimeSummaryItem>();
+        }
+
+        public bool CopyCommentToClipboardCommandCanExecute( string projectName )
+        {
+            return true;
+        }
+
+        public void CopyCommentToClipboardCommandOnExecute( string projectName )
+        {
+            Clipboard.Clear();
+
+            var comments =  from project in this.TimeSummaryItems
+                            where project.ProjectName == projectName
+                            from comment in project.Comments
+                            select comment; 
+
+            StringBuilder commentText = new StringBuilder();
+
+            foreach ( var comment in comments )
+            {
+                if ( comment != null && comment != string.Empty)
+                  commentText.AppendLine( comment.ToString() );
+            }
+
+            Clipboard.SetText( commentText.ToString().Trim() );
         }
 
         private bool ParseCommandCanExecute()
@@ -123,22 +150,22 @@ namespace TimeSummary.UI.WPF
         {
             StringBuilder outputString = new StringBuilder();
 
-            foreach ( var li in this.TimeSummaryItems )
-            {
+            //foreach ( var li in this.TimeSummaryItems )
+            //{
                 // output the total time spent for the day on a bucket
-                outputString.AppendLine( string.Format( "{0}   {1:0.00} Hours", li.ProjectName, li.TimeSpentInHours ) );
+                //outputString.AppendLine( string.Format( "{0}   {1:0.00} Hours", li.ProjectName, li.TimeSpentInHours ) );
 
                 // output the comments for each line item on a seperate line
-                foreach ( var comment in li.Comments )
-                {
-                    outputString.AppendLine( string.Format( "{0}", comment.Replace( '\r', ' ' ) ) );
-                }
+                //foreach ( var comment in li.Comments )
+                //{
+                //    outputString.AppendLine( string.Format( "{0}", comment.Replace( '\r', ' ' ) ) );
+                //}
 
-                outputString.AppendLine();
-            }
+                //outputString.AppendLine();
+            //}
 
             // Output a summary line
-            outputString.AppendLine( "----------------------------------------------------------" );
+            //outputString.AppendLine( "----------------------------------------------------------" );
             outputString.AppendLine( string.Format( "Total Time Worked: {0:0.00} Hours", this.TimeSummaryItems.Sum( x => x.TimeSpentInHours ) ) );
 
             return outputString.ToString();

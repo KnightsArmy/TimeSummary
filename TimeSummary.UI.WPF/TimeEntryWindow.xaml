@@ -5,8 +5,9 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TimeSummary.UI.WPF"
+        xmlns:models="clr-namespace:TimeEntry.Models;assembly=TimeEntry.Models"
         d:DataContext="{d:DesignInstance local:TimeEntryViewModel}"
-        Title="Time Summary" Height="750" Width="525" mc:Ignorable="d">
+        Title="Time Summary" Height="750" Width="525" mc:Ignorable="d" Name="ControlRoot">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -24,10 +25,29 @@
             <RowDefinition></RowDefinition>
             <RowDefinition Height="50"></RowDefinition>
             <RowDefinition></RowDefinition>
+            <RowDefinition Height="50"></RowDefinition>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition></ColumnDefinition>
         </Grid.ColumnDefinitions>
+        <Grid.Resources>
+            <DataTemplate DataType="{x:Type models:TimeSummaryItem}">
+                <Grid>
+                    <Grid.RowDefinitions/>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="100"></ColumnDefinition>
+                        <ColumnDefinition Width="50"></ColumnDefinition>
+                        <ColumnDefinition Width="200"></ColumnDefinition>
+                        <ColumnDefinition Width="100"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Grid.Column="0" Text="{Binding ProjectName}" />
+                    <TextBlock Grid.Column="1" Text="{Binding TimeSpentInHours}" />
+                    <ItemsControl Grid.Column="2" ItemsSource="{Binding Comments}" />
+                    <Button Grid.Column="3" Command="{Binding DataContext.CopyCommentToClipboardCommand, ElementName=ControlRoot}" CommandParameter="{Binding ProjectName}" Content="Copy Comment" />
+                </Grid>
+            </DataTemplate>
+        </Grid.Resources>
         <StackPanel Grid.Row="0" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Right">
             <Button Name="txtHelp" Click="txtHelp_Click">
                 <Viewbox xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
@@ -51,6 +71,7 @@
         </StackPanel>
         <TextBox Name="txtInput" Grid.Row="1" AcceptsReturn="True" Text="{Binding TimeEntryInput, Mode=TwoWay}" />
         <Button Name="btnParse" Content="Parse" Grid.Row="2" Command="{Binding ParseCommand}" />
-        <TextBox Name="txtOutput" Grid.Row="3" VerticalScrollBarVisibility="Auto" Text="{Binding TimeEntryOutput}"/>
+        <ItemsControl ItemsSource="{Binding TimeSummaryItems}" Grid.Row="3" />
+        <TextBox Name="txtOutput" Grid.Row="4" VerticalScrollBarVisibility="Auto" Text="{Binding TimeEntryOutput}"/>
     </Grid>
 </Controls:MetroWindow>

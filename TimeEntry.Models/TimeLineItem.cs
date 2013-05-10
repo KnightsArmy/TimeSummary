@@ -13,7 +13,7 @@ namespace TimeEntry.Models
         private const string ProjectGroup = "projectName";
         private const string CommentGroup = "comment";
         private const string TimePattern = @"\d*\d(:\d*\d)*\s*([ap]m)*";
-        private static string TimeLineEntryPattern = string.Format( @"(?<{1}>{0})\s*-\s*(?<{2}>{0})\s+(?<{3}>\S+)\s*(?<{4}>.*$)",
+        private static string TimeLineEntryPattern = string.Format( @"(?<{1}>{0})\s*-\s*(?<{2}>{0})\s+(?<{3}>\S+)\s*(?<{4}>.*)$",
             TimePattern,
             StartTimeGroup,
             EndTimeGroup,
@@ -109,7 +109,7 @@ namespace TimeEntry.Models
                     StartTime = DateTime.Parse( startTime ),
                     EndTime = DateTime.Parse( endTime ),
                     ProjectName = projectName,
-                    Comment = comment
+                    Comment = comment.Trim()
                 };
 
                 logger.Info( tli.ToString() );
