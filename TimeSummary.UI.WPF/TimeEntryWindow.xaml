@@ -7,7 +7,7 @@
         xmlns:local="clr-namespace:TimeSummary.UI.WPF"
         xmlns:models="clr-namespace:TimeEntry.Models;assembly=TimeEntry.Models"
         d:DataContext="{d:DesignInstance local:TimeEntryViewModel}"
-        Title="Time Summary" Height="750" Width="525" mc:Ignorable="d" Name="ControlRoot">
+        Title="Time Summary" Height="675" Width="525" mc:Ignorable="d" Name="ControlRoot">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -32,14 +32,21 @@
         </Grid.ColumnDefinitions>
         <Grid.Resources>
             <DataTemplate DataType="{x:Type models:TimeSummaryItem}">
-                <Grid>
+                <Grid Margin="5">
                     <Grid.RowDefinitions/>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="100"></ColumnDefinition>
                         <ColumnDefinition Width="50"></ColumnDefinition>
-                        <ColumnDefinition Width="200"></ColumnDefinition>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
                         <ColumnDefinition Width="32"></ColumnDefinition>
                     </Grid.ColumnDefinitions>
+                    <Grid.Resources>
+                        <Style x:Name="Button" TargetType="Button">
+                            <Setter Property="Margin" Value="3,3" />
+                            <Setter Property="Background" Value="White" />
+                            <Setter Property="BorderThickness" Value="0" />
+                        </Style>
+                    </Grid.Resources>
 
                     <TextBlock Grid.Column="0" Text="{Binding ProjectName}" />
                     <TextBlock Grid.Column="1" Text="{Binding TimeSpentInHours}" />
@@ -86,9 +93,11 @@
                 </Viewbox>
             </Button>
         </StackPanel>
-        <TextBox Name="txtInput" Grid.Row="1" AcceptsReturn="True" Text="{Binding TimeEntryInput, Mode=TwoWay}" />
+        <TextBox Name="txtInput" Grid.Row="1" AcceptsReturn="True" Text="{Binding TimeEntryInput, Mode=TwoWay}" VerticalScrollBarVisibility="Auto" />
         <Button Name="btnParse" Content="Parse" Grid.Row="2" Command="{Binding ParseCommand}" />
-        <ItemsControl ItemsSource="{Binding TimeSummaryItems}" Grid.Row="3" />
-        <TextBox Name="txtOutput" Grid.Row="4" VerticalScrollBarVisibility="Auto" Text="{Binding TimeEntryOutput}"/>
+        <ScrollViewer Grid.Row="3">
+          <ItemsControl ItemsSource="{Binding TimeSummaryItems}" />
+        </ScrollViewer>
+        <TextBox Name="txtOutput" Grid.Row="4" Text="{Binding TimeEntryOutput}"/>
     </Grid>
 </Controls:MetroWindow>
