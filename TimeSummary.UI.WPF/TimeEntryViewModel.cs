@@ -76,10 +76,10 @@ namespace TimeSummary.UI.WPF
         {
             Clipboard.Clear();
 
-            var comments =  from project in this.TimeSummaryItems
+            var comments =  ( from project in this.TimeSummaryItems
                             where project.ProjectName == projectName
                             from comment in project.Comments
-                            select comment; 
+                            select comment ).Distinct();
 
             StringBuilder commentText = new StringBuilder();
 
@@ -132,9 +132,9 @@ namespace TimeSummary.UI.WPF
         {
             foreach ( var li in this.TimeSummaryItems )
             {
-                var comments = from cli in this.TimeLineItems
+                var comments = ( from cli in this.TimeLineItems
                                where cli.ProjectName.ToUpper() == li.ProjectName.ToUpper() && cli.Comment != string.Empty
-                               select cli.Comment;
+                               select cli.Comment ).Distinct();
 
                 // output the comments for each line item on a seperate line
                 foreach ( var comment in comments )
