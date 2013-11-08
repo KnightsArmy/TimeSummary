@@ -47,6 +47,25 @@ namespace TimeEntry.Models.Tests
         }
 
         [TestMethod]
+        public void ParseMixedCaseAMVerboseEntry()
+        {
+          // Arrange
+          string startTime = "5:15 Am";
+          string endTime = "6:30 am";
+          string projectName = "AT";
+          string comment = "Emails, Timesheet";
+
+          // Act
+          TimeLineItem sut = TimeLineItem.Parse(string.Format("{0} - {1} {2} {3}", startTime, endTime, projectName, comment));
+
+          // Assert
+          Assert.AreEqual(DateTime.Parse(startTime), sut.StartTime);
+          Assert.AreEqual(DateTime.Parse(endTime), sut.EndTime);
+          Assert.AreEqual(projectName, sut.ProjectName);
+          Assert.AreEqual(comment, sut.Comment);
+        }
+
+        [TestMethod]
         public void ParseWithNoonInTime()
         {
             // Arrange

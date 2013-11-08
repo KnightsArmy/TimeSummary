@@ -12,7 +12,7 @@ namespace TimeEntry.Models
         private const string EndTimeGroup = "endTime";
         private const string ProjectGroup = "projectName";
         private const string CommentGroup = "comment";
-        private const string TimePattern = @"\d*\d(:\d*\d)*\s*([ap]m)*";
+        private const string TimePattern = @"\d*\d(:\d*\d)*\s*((?i:[ap]m))*";
         private static string TimeLineEntryPattern = string.Format( @"(?<{1}>{0})\s*-\s*(?<{2}>{0})\s+(?<{3}>\S+)\s*(?<{4}>.*)$",
             TimePattern,
             StartTimeGroup,
