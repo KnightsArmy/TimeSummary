@@ -57,11 +57,13 @@ namespace TimeSummary.UI.WPF
         }
 
         public ICommand ParseCommand { get; private set; }
+        public ICommand PasteAndParseCommand { get; private set; }
         public ICommand CopyCommentToClipboardCommand { get; private set; }
 
         public TimeEntryViewModel()
         {
             this.ParseCommand = new RelayCommand( ParseCommandOnExecute, ParseCommandCanExecute );
+            this.PasteAndParseCommand = new RelayCommand( PasteAndParseCommandOnExecute, PasteAndParseCommandCanExecute );
             this.CopyCommentToClipboardCommand = new RelayCommand<string>( CopyCommentToClipboardCommandOnExecute, CopyCommentToClipboardCommandCanExecute );
             this.TimeLineItems = new List<TimeLineItem>();
             this.TimeSummaryItems = new List<TimeSummaryItem>();
@@ -76,23 +78,32 @@ namespace TimeSummary.UI.WPF
         {
             Clipboard.Clear();
 
-            var comments =  ( from project in this.TimeSummaryItems
-                            where project.ProjectName == projectName
-                            from comment in project.Comments
-                            select comment ).Distinct();
+            var comments = ( from project in this.TimeSummaryItems
+                             where project.ProjectName == projectName
+                             from comment in project.Comments
+                             select comment ).Distinct();
 
             StringBuilder commentText = new StringBuilder();
 
             foreach ( var comment in comments )
             {
-                if ( comment != null && comment != string.Empty)
-                  commentText.AppendLine( comment.ToString() );
+                if ( comment != null && comment != string.Empty )
+                    commentText.AppendLine( comment.ToString() );
             }
 
             Clipboard.SetText( commentText.ToString().Trim() );
         }
 
         private bool ParseCommandCanExecute()
+        {
+            if ( string.IsNullOrEmpty( this.TimeEntryInput ) )
+                return false;
+            else
+                return true;
+        }
+
+
+        private bool PasteAndParseCommandCanExecute()
         {
             return true;
         }
@@ -133,8 +144,8 @@ namespace TimeSummary.UI.WPF
             foreach ( var li in this.TimeSummaryItems )
             {
                 var comments = ( from cli in this.TimeLineItems
-                               where cli.ProjectName.ToUpper() == li.ProjectName.ToUpper() && cli.Comment != string.Empty
-                               select cli.Comment ).Distinct();
+                                 where cli.ProjectName.ToUpper() == li.ProjectName.ToUpper() && cli.Comment != string.Empty
+                                 select cli.Comment ).Distinct();
 
                 // output the comments for each line item on a seperate line
                 foreach ( var comment in comments )
@@ -148,22 +159,6 @@ namespace TimeSummary.UI.WPF
         {
             StringBuilder outputString = new StringBuilder();
 
-            //foreach ( var li in this.TimeSummaryItems )
-            //{
-                // output the total time spent for the day on a bucket
-                //outputString.AppendLine( string.Format( "{0}   {1:0.00} Hours", li.ProjectName, li.TimeSpentInHours ) );
-
-                // output the comments for each line item on a seperate line
-                //foreach ( var comment in li.Comments )
-                //{
-                //    outputString.AppendLine( string.Format( "{0}", comment.Replace( '\r', ' ' ) ) );
-                //}
-
-                //outputString.AppendLine();
-            //}
-
-            // Output a summary line
-            //outputString.AppendLine( "----------------------------------------------------------" );
             outputString.AppendLine( string.Format( "Total Time Worked: {0:0.00} Hours", this.TimeSummaryItems.Sum( x => x.TimeSpentInHours ) ) );
 
             return outputString.ToString();
@@ -172,9 +167,21 @@ namespace TimeSummary.UI.WPF
         private void ParseCommandOnExecute()
         {
             this.ResetTimeEntries();
+            this.CompleteParseCommands();
+        }
+
+        private void CompleteParseCommands()
+        {
             this.ParseContentsOfInputBox();
             this.CreateTimeSummaryLists();
             this.TimeEntryOutput = this.FormatOutput();
+        }
+
+        public void PasteAndParseCommandOnExecute()
+        {
+            this.ResetTimeEntries();
+            this.TimeEntryInput = Clipboard.GetText();
+            this.CompleteParseCommands();
         }
     }
 }

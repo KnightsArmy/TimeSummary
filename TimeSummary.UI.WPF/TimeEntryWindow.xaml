@@ -72,12 +72,33 @@
                 </Grid>
             </DataTemplate>
         </Grid.Resources>
-        <StackPanel Grid.Row="0" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Right">
+        <StackPanel Grid.Row="0" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Left" Margin="3">
+            <Button Name="btnPasteAndParse" Command="{Binding PasteAndParseCommand}">
+                <Viewbox xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
+                    <Grid>
+                        <Grid Width="48" Height="48" Visibility="Visible">
+                            <Rectangle Fill="#FFFBFBFB" Visibility="Visible" />
+                        </Grid>
+                        <Path Data="M30.221986,43.750175L51.522991,65.050751 51.522991,48.900314 56.016994,53.390438 56.018993,72.720963 51.52399,72.720963 36.575988,72.720963 32.199985,68.340843 32.197986,68.230843 48.346992,68.22084 27.045984,46.920261z M23.41675,2.7189994C21.472833,2.7190001 19.895999,4.2111921 19.895999,6.0525041 19.895999,7.8918576 21.472833,9.3859997 23.41675,9.3859987 25.360666,9.3859997 26.937999,7.8918576 26.937999,6.0525041 26.937999,4.2111921 25.360666,2.7190001 23.41675,2.7189994z M23.41675,0C26.835689,0,29.628473,2.5418639,29.799682,5.7406969L29.807993,6.0519991 35.229999,6.0519991 35.229999,7.9879994 46.833999,7.9879994 46.833999,54.099731 41.696998,48.961639 41.696998,14.389 35.229999,14.389 35.229999,20.865 11.604,20.865 11.604,14.389 5.1370001,14.389 5.1370001,59.294998 33.080692,59.294998 38.126308,64.338997 0,64.338997 0,7.9879994 11.604,7.9879994 11.604,6.0519991 17.026008,6.0519991 17.034315,5.7406969C17.20545,2.5418639,19.997036,0,23.41675,0z" Stretch="Uniform" Fill="#FF41B1E1" Width="26" Height="26" Margin="0,0,0,0" RenderTransformOrigin="0.5,0.5">
+                            <Path.RenderTransform>
+                                <TransformGroup>
+                                    <TransformGroup.Children>
+                                        <RotateTransform Angle="0" />
+                                        <ScaleTransform ScaleX="1" ScaleY="1" />
+                                    </TransformGroup.Children>
+                                </TransformGroup>
+                            </Path.RenderTransform>
+                        </Path>
+                    </Grid>
+                </Viewbox>
+            </Button>
+        </StackPanel>
+        <StackPanel Grid.Row="0" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="3">
             <Button Name="txtHelp" Click="txtHelp_Click">
                 <Viewbox xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
                     <Grid>
-                        <Grid Name="backgroundGrid" Width="48" Height="48" Visibility="Visible">
-                            <Rectangle Name="Rect" Visibility="Visible" />
+                        <Grid  Width="48" Height="48" Visibility="Visible">
+                            <Rectangle Visibility="Visible" />
                         </Grid>
                         <Path Data="F1M1355.27,1727.8L1346.08,1727.8C1346.06,1726.48 1346.05,1725.67 1346.05,1725.38 1346.05,1722.41 1346.54,1719.96 1347.52,1718.04 1348.51,1716.12 1350.47,1713.96 1353.43,1711.56 1356.38,1709.16 1358.14,1707.58 1358.72,1706.84 1359.61,1705.66 1360.05,1704.37 1360.05,1702.95 1360.05,1700.98 1359.27,1699.29 1357.7,1697.89 1356.12,1696.49 1354,1695.78 1351.34,1695.78 1348.77,1695.78 1346.62,1696.52 1344.89,1697.98 1343.16,1699.44 1341.98,1701.68 1341.33,1704.68L1332.04,1703.53C1332.3,1699.23 1334.13,1695.58 1337.53,1692.58 1340.93,1689.58 1345.38,1688.08 1350.91,1688.08 1356.72,1688.08 1361.34,1689.6 1364.77,1692.63 1368.21,1695.67 1369.92,1699.2 1369.92,1703.24 1369.92,1705.47 1369.29,1707.58 1368.03,1709.58 1366.77,1711.57 1364.08,1714.28 1359.95,1717.71 1357.81,1719.49 1356.48,1720.92 1355.97,1722 1355.45,1723.08 1355.22,1725.01 1355.27,1727.8z M1346.08,1741.41L1346.08,1731.29 1356.2,1731.29 1356.2,1741.41 1346.08,1741.41z" Stretch="Uniform" Fill="#FF41B1E1" Width="26" Height="26" Margin="0,0,0,0" RenderTransformOrigin="0.5,0.5">
                             <Path.RenderTransform>
@@ -93,10 +114,10 @@
                 </Viewbox>
             </Button>
         </StackPanel>
-        <TextBox Name="txtInput" Grid.Row="1" AcceptsReturn="True" Text="{Binding TimeEntryInput, Mode=TwoWay}" VerticalScrollBarVisibility="Auto" />
+        <TextBox Name="txtInput" Grid.Row="1" AcceptsReturn="True" Text="{Binding TimeEntryInput, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalScrollBarVisibility="Auto" />
         <Button Name="btnParse" Content="Parse" Grid.Row="2" Command="{Binding ParseCommand}" />
         <ScrollViewer Grid.Row="3">
-          <ItemsControl ItemsSource="{Binding TimeSummaryItems}" />
+            <ItemsControl ItemsSource="{Binding TimeSummaryItems}" />
         </ScrollViewer>
         <TextBox Name="txtOutput" Grid.Row="4" Text="{Binding TimeEntryOutput}"/>
     </Grid>

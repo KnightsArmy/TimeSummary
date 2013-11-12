@@ -108,5 +108,27 @@ namespace TimeSummary.UI.Tests
             // Assert
             Assert.AreEqual( tl1.Comment, results );
         }
+
+
+        [TestMethod]
+        public void PasteAndParseCommandTest()
+        {
+            // Arrange (Get some initial data into the app)
+            string testComment = "TestComment";
+            TimeLineItem tl1 = new TimeLineItem() { ProjectName = "AT", StartTime = DateTime.Parse( "1:00 pm" ), EndTime = DateTime.Parse( "2:00 pm" ), Comment = testComment };
+            List<TimeLineItem> items = new List<TimeLineItem>();
+            items.Add( tl1 );
+            TimeEntryViewModel sut = new TimeEntryViewModel();
+            sut.TimeLineItems = items;
+            sut.CreateTimeSummaryLists();
+            sut.CopyCommentToClipboardCommandOnExecute( "AT" );
+
+            // Arrange (Here is our new data to paste in and parse)
+            System.Windows.Forms.Clipboard.SetData( "Text", "10:15 - 11 DM Eric's Weekly\r\n11-12 AT Email" );
+			sut.PasteAndParseCommand.Execute( null );
+
+            // Assert
+            Assert.AreEqual( 2, sut.TimeSummaryItems.Count );
+        }
     }
 }
