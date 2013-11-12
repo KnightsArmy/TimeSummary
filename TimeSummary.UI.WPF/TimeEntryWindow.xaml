@@ -73,7 +73,7 @@
             </DataTemplate>
         </Grid.Resources>
         <StackPanel Grid.Row="0" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Left" Margin="3">
-            <Button Name="btnPasteAndParse" Command="{Binding PasteAndParseCommand}">
+            <Button Name="btnPasteAndParse" Command="{Binding PasteAndParseCommand}" ToolTip="Paste and Parse">
                 <Viewbox xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
                     <Grid>
                         <Grid Width="48" Height="48" Visibility="Visible">
@@ -94,7 +94,7 @@
             </Button>
         </StackPanel>
         <StackPanel Grid.Row="0" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="3">
-            <Button Name="txtHelp" Click="txtHelp_Click">
+            <Button Name="txtHelp" Click="txtHelp_Click" ToolTip="Help">
                 <Viewbox xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
                     <Grid>
                         <Grid  Width="48" Height="48" Visibility="Visible">
