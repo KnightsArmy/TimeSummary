@@ -106,7 +106,13 @@ namespace TimeEntry.Models
                 }
                 else if ( startAmpm.Length == 0 && endAmpm.Length > 0 )
                 {
-                    if ( startHours + startMinutes / 60 > endHours + endMinutes / 60 )
+                    // Since I am rarely working at 12 am, but almost always working at 12 pm, default to PM. This means
+                    // if I mean AM I have to explicitly mark it as 12 am in my time entry.
+                    if ( startHours.Equals( 12 ) )
+                    {
+                        startAmpm = "pm";
+                    }
+                    else if ( startHours + startMinutes / 60 > endHours + endMinutes / 60 )
                     {
                         if ( endAmpm.ToLower() == "am" ) startAmpm = "pm";
                         if ( endAmpm.ToLower() == "pm" ) startAmpm = "am";
@@ -118,7 +124,13 @@ namespace TimeEntry.Models
                 }
                 else // startAmPM has a value but end doesn't
                 {
-                    if ( startHours + startMinutes / 60 > endHours + endMinutes / 60 )
+                    // Since I am rarely working at 12 am, but almost always working at 12 pm, default to PM. This means
+                    // if I mean AM I have to explicitly mark it as 12 am in my time entry.
+                    if ( endHours.Equals( 12 ) )
+                    {
+                        endAmpm = "pm";
+                    }
+                    else if ( startHours + startMinutes / 60 > endHours + endMinutes / 60 )
                     {
                         if ( startAmpm.ToLower() == "am" ) endAmpm = "pm";
                         if ( startAmpm.ToLower() == "pm" ) endAmpm = "am";

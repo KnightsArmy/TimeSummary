@@ -77,6 +77,8 @@ namespace TimeSummary.UI.Tests
             sut.CreateTimeSummaryLists();
             sut.CopyCommentToClipboardCommandOnExecute( "AT" );
 
+            System.Threading.Thread.Sleep( 500 );
+
             string results = System.Windows.Forms.Clipboard.GetText();
 
             // Assert
@@ -102,6 +104,8 @@ namespace TimeSummary.UI.Tests
             sut.TimeLineItems = items;
             sut.CreateTimeSummaryLists();
             sut.CopyCommentToClipboardCommandOnExecute( "AT" );
+
+            System.Threading.Thread.Sleep( 500 );
 
             string results = System.Windows.Forms.Clipboard.GetText();
 

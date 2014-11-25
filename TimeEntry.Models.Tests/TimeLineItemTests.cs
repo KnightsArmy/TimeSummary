@@ -415,6 +415,39 @@ namespace TimeEntry.Models.Tests
             // Assert
             Assert.AreEqual( 2.5, timeSpent );
         }
+
+
+        [TestMethod]
+        public void TimeSpentUpToNoonWithFirstAMPMSpecifiedTest()
+        {
+            // Arrange
+            string startTime = "11:00 am";
+            string endTime = "12:00";
+            string projectName = "AT";
+            TimeLineItem sut = TimeLineItem.Parse( string.Format( "{0} - {1} {2}", startTime, endTime, projectName ) );
+
+            // Act
+            double timeSpent = sut.TimeSpentInHours();
+
+            // Assert
+            Assert.AreEqual( 1.0, timeSpent );
+        }
+
+        [TestMethod]
+        public void TimeSpentUpToNoonWithSecondAMPMSpecifiedTest()
+        {
+            // Arrange
+            string startTime = "12:00";
+            string endTime = "1:00 pm";
+            string projectName = "AT";
+            TimeLineItem sut = TimeLineItem.Parse( string.Format( "{0} - {1} {2}", startTime, endTime, projectName ) );
+
+            // Act
+            double timeSpent = sut.TimeSpentInHours();
+
+            // Assert
+            Assert.AreEqual( 1.0, timeSpent );
+        }
         #endregion
     }
 }
